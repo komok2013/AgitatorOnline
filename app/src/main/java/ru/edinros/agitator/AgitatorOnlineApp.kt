@@ -9,8 +9,7 @@ import timber.log.Timber.Forest.plant
 
 
 @HiltAndroidApp
-
-class AgitatorOnlineApp:Application() {
+class AgitatorOnlineApp : Application() {
     override fun onCreate() {
         Kotpref.init(this)
         if (BuildConfig.DEBUG) {

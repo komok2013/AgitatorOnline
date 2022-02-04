@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "951042449580",
+    "firebase_url": "https://edinaya-rossiya.firebaseio.com",
+    "project_id": "edinaya-rossiya",
+    "storage_bucket": "edinaya-rossiya.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951042449580:android:bf3277c7b491578a0aff09",
+        "android_client_info": {
+          "package_name": "ru.edinros.agitator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951042449580-ea9ui5frlm811gr7ctdom256224r0huj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOoxaIkV9Wlmi_9uI8Fkf5QPvbdiKVFG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951042449580-ea9ui5frlm811gr7ctdom256224r0huj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "951042449580-7sqiuhl8svkcb4imkr05q93dh1r0mt6l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.edinros.agitator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951042449580:android:51d37ef4f9e675d70aff09",
+        "android_client_info": {
+          "package_name": "ru.edinros.app.eo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951042449580-ea9ui5frlm811gr7ctdom256224r0huj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOoxaIkV9Wlmi_9uI8Fkf5QPvbdiKVFG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951042449580-ea9ui5frlm811gr7ctdom256224r0huj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "951042449580-7sqiuhl8svkcb4imkr05q93dh1r0mt6l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.edinros.agitator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951042449580:android:71e3381fd5c23f39",
+        "android_client_info": {
+          "package_name": "ru.edinros.iparty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "951042449580-nbf4saj36t0knqq31pnk9mvqptrbvi1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.edinros.iparty",
+            "certificate_hash": "e8b85abed3c4ece9d5eebc41ba03e5a501107ccc"
+          }
+        },
+        {
+          "client_id": "951042449580-ea9ui5frlm811gr7ctdom256224r0huj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOoxaIkV9Wlmi_9uI8Fkf5QPvbdiKVFG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "951042449580-ea9ui5frlm811gr7ctdom256224r0huj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "951042449580-7sqiuhl8svkcb4imkr05q93dh1r0mt6l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ru.edinros.agitator"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

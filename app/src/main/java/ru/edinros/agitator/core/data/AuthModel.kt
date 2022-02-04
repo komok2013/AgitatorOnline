@@ -16,7 +16,7 @@ data class AuthRequest(
     val phone: String,
     val password: String,
     val provider: String = "fcm",
-    val identity: String = PushPref.identity
+    val identity: String = PushPref.identity,
 )
 @Serializable
 data class AuthResponse(
@@ -30,7 +30,8 @@ data class AuthResponse(
 data class ReplaceTokenRequest(
     val identity: String = PushPref.identity
 )
+
 @Serializable
 data class ReplaceTokenResponse(
-    val ok: Boolean = false
+    val ok: Boolean
 )
