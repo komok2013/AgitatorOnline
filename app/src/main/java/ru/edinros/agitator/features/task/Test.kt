@@ -24,10 +24,10 @@ val data = listOf("☕️", "🙂", "🥛", "🎉"/*, "📐", "🎯", "🧩", "�
 
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 @Composable
 fun TwoTexts(modifier: Modifier = Modifier, text1: String, text2: String) {
-    ('А'..'Я').forEach { Timber.d("->%s",it) }
+//    ('А'..'Я').forEach { Timber.d("->%s",it) }
 
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
@@ -103,6 +103,7 @@ fun TwoTexts(modifier: Modifier = Modifier, text1: String, text2: String) {
 
 }
 
+@ExperimentalFoundationApi
 @Preview
 @Composable
 fun TwoTextsPreview() {

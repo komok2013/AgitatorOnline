@@ -30,7 +30,7 @@
             </intent-filter>
         </service>
         <activity
-            android:name="ru.edinros.agitator.features.auth.AuthActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AgitatorOnline">
             <intent-filter>
@@ -39,11 +39,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="ru.edinros.agitator.MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AgitatorOnline">
-        </activity>
+<!--        <activity-->
+<!--            android:name="ru.edinros.agitator.MainActivity"-->
+<!--            android:exported="true"-->
+<!--            android:theme="@style/Theme.AgitatorOnline">-->
+<!--        </activity>-->
     </application>
 
 </manifest>

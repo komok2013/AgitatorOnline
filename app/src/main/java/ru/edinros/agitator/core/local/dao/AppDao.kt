@@ -2,20 +2,19 @@ package ru.edinros.agitator.core.local.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import ru.edinros.agitator.core.local.entities.TaskEntity
 
 @Dao
 interface AppDao {
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertTask(entity: TaskEntity)
-//
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertTasks(list:List<TaskEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTasks(list:List<TaskEntity>)
 //
 //    @Update
 //    suspend fun updateTask(task: TaskEntity)
 //
-//    @Query("select * from TaskEntity order by assigned_at desc limit 100")
-//    fun getTaskListFlow(): Flow<List<TaskEntity>>
+    @Query("select * from TaskEntity order by assigned_at desc limit 100")
+    fun getTaskListFlow(): Flow<List<TaskEntity>>
 //
 //
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)

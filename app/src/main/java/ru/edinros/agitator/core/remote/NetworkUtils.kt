@@ -67,13 +67,14 @@ sealed class Failure {
     object ResponseBodyIsNull:Failure()
     class HttpErrorUnauthorized(val error: String = "неавторизованный доступ") : Failure()
     class HttpErrorOther(val error: String = "") : Failure()
-    class GenericError(val error: String = "Что-то пошло не так", val exception: Exception) :        Failure()
+    class GenericError(val error: String = "Что-то пошло не так", val exception: Throwable) :        Failure()
 
     class NoPhoneRegistered(val error: String = "данный номер не зарегистрирован в системе") :
         Failure()
 
     class NoValidPhone(val error: String = "не валидный номер телефона") : Failure()
     class AuthenticationError(val error: String = "ошибка аутентификации") : Failure()
+    class NoTask (val error: String="Ошибка при выдаче задач"):Failure()
 
     fun errorMsg() = when (this) {
         NoNetworkConnection -> "нет сетевого соединения"
@@ -84,6 +85,7 @@ sealed class Failure {
         is NoPhoneRegistered -> error
         is NoValidPhone -> error
         ResponseBodyIsNull -> "пустой ответ"
+        is NoTask -> error
     }
 
     fun exceptionMsg() = when (this) {

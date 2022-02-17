@@ -45,18 +45,17 @@ class AuthActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AgitatorOnlineTheme {
-                val scope = rememberCoroutineScope()
-                val snackBarHostState = remember { SnackbarHostState() }
+                val scaffoldState = rememberScaffoldState()
                 val model: AuthVM = hiltViewModel()
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    snackbarHost = { SnackbarHost(hostState = snackBarHostState) }) {
+                    scaffoldState=scaffoldState,
+                    modifier = Modifier.fillMaxSize()){
                     when (val res = model.state.collectAsState().value) {
                         is AuthState.AuthError -> {
-                            scope.launch { snackBarHostState.showSnackbar(res.message) }
+                            LaunchedEffect(scaffoldState){scaffoldState.snackbarHostState.showSnackbar(res.message) }
                             TextEditWithActionButton(
-                                visualTransformation = PasswordVisualTransformation(),
-                                initText = AuthPref.accessToken,
+                                state=res,
+                                initText = "",
                                 label="Код подтверждения",
                                 textFilter = CodeRules.filter,
                                 maxLength = CodeRules.maxLength,
@@ -68,6 +67,7 @@ class AuthActivity : ComponentActivity() {
                             finish()
                         }
                         AuthState.Init -> TextEditWithActionButton(
+                            state=res,
                             visualTransformation = PhoneVisualTransformation(),
                             initText = AuthPref.phone,
                             textFilter = PhoneRules.filter,
@@ -76,8 +76,10 @@ class AuthActivity : ComponentActivity() {
                             action = { s -> model.proceedPhoneNumber(s) }
                         )
                         is AuthState.PhoneError -> {
-                            scope.launch { snackBarHostState.showSnackbar(res.message) }
+                            LaunchedEffect(scaffoldState){scaffoldState.snackbarHostState.showSnackbar(res.message) }
+                            //scope.launch { snackBarHostState.showSnackbar(res.message) }
                             TextEditWithActionButton(
+                                state=res,
                                 visualTransformation = PhoneVisualTransformation(),
                                 label="Номер телефона",
                                 initText = AuthPref.phone,
@@ -92,7 +94,7 @@ class AuthActivity : ComponentActivity() {
                                 model.proceedAuthentication(s)
                             })
                             TextEditWithActionButton(
-                                visualTransformation = PasswordVisualTransformation(),
+                                state=res,
                                 textFilter = CodeRules.filter,
                                 maxLength = CodeRules.maxLength,
                                 label = "Код подтверждения",
@@ -181,7 +183,7 @@ interface CodeRules {
 
 @Composable
 private fun TextEditWithActionButton(
-    model: AuthVM = hiltViewModel(),
+    state: AuthState=AuthState.Progress,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     label: String="",
     initText: String = "",
@@ -189,7 +191,7 @@ private fun TextEditWithActionButton(
     maxLength: Int = 0,
     action: ((String) -> Unit)? = null
 ) {
-    ('А'..'Я').forEach { Timber.d("->%s",it) }
+    //('А'..'Я').forEach { Timber.d("->%s",it) }
     var text by rememberSaveable { mutableStateOf(initText) }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -203,7 +205,7 @@ private fun TextEditWithActionButton(
                 disabledIndicatorColor = Transparent,
                 ),
             label = { Text(text = label) },
-            enabled = model.state.value !is AuthState.Progress,
+            enabled = state !is AuthState.Progress,
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
@@ -229,6 +231,7 @@ private fun TextEditWithActionButton(
             ),
             trailingIcon = {
                 LeadingButton(
+                    inProgress = state is AuthState.Progress,
                     visibility = text.length == maxLength
                 ) {
                     action?.apply {
@@ -242,11 +245,11 @@ private fun TextEditWithActionButton(
 
 @Composable
 private fun LeadingButton(
-    model: AuthVM = hiltViewModel(),
+    inProgress:Boolean,
     visibility: Boolean,
     onClick: () -> Unit,
 ) {
-    return when (model.state.value is AuthState.Progress) {
+    return when (inProgress) {
         true -> CircularProgressIndicator(
             modifier = Modifier.padding(8.dp),
         )

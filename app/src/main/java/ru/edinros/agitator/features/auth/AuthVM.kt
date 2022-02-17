@@ -42,7 +42,7 @@ class AuthVM @Inject constructor(private val repository: AuthRepository):ViewMod
                 _state.value = AuthState.AuthError(it.errorMsg())
             },
             {
-                AuthPref.accessToken = it.token
+                AuthPref.accessToken = String.format("Token %s", it.token)
                 _state.value = AuthState.AuthSuccess
             }
         )

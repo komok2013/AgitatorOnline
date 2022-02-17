@@ -1,10 +1,22 @@
 package ru.edinros.agitator.core.local
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import ru.edinros.agitator.core.local.dao.AppDao
+import ru.edinros.agitator.core.local.entities.TaskEntity
 
+@Database(entities = [TaskEntity::class], version = 2)
+@TypeConverters(
+    ListOfStringConverter::class,
+    TaskLinksConverter::class,
+    TaskTypeConverter::class,
+    TaskAttachmentsConverter::class,
+    AttachmentTypeConverter::class,
+    RejectedReportsConverter::class
+)
 abstract class AppDB : RoomDatabase() {
     abstract fun dao(): AppDao
     companion object {
