@@ -17,13 +17,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Blue
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,8 +28,7 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import ru.edinros.agitator.MainActivity
+import ru.edinros.agitator.TaskActivity
 import ru.edinros.agitator.core.prefs.AuthPref
 import ru.edinros.agitator.features.auth.receiver.SystemBroadcastReceiver
 import ru.edinros.agitator.ui.theme.AgitatorOnlineTheme
@@ -63,7 +59,7 @@ class AuthActivity : ComponentActivity() {
                             )
                         }
                         AuthState.AuthSuccess -> {
-                            startActivity(Intent(this, MainActivity::class.java))
+                            startActivity(Intent(this, TaskActivity::class.java))
                             finish()
                         }
                         AuthState.Init -> TextEditWithActionButton(

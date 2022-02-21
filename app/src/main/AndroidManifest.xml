@@ -30,7 +30,7 @@
             </intent-filter>
         </service>
         <activity
-            android:name=".MainActivity"
+            android:name=".TaskActivity"
             android:exported="true"
             android:theme="@style/Theme.AgitatorOnline">
             <intent-filter>
