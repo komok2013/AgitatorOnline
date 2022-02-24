@@ -34,6 +34,7 @@ import ru.edinros.agitator.features.auth.receiver.SystemBroadcastReceiver
 import ru.edinros.agitator.ui.theme.AgitatorOnlineTheme
 import timber.log.Timber
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class AuthActivity : ComponentActivity() {
 

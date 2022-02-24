@@ -2,6 +2,8 @@ package ru.edinros.agitator.core.data
 
 import android.os.Parcelable
 import androidx.annotation.ColorRes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -128,11 +130,13 @@ enum class TaskType {
     repost,//репост
     undefined //неопределено
 }
-
-enum class TaskStatus(@ColorRes val color: Int, val text: String, val filterText: String) {
-    Unknown(-1, "Все", "Все"),
-    New(-1, "Новое", "Новые"),
-    InWork(-1, "В работе", "В работе"),
-    Completed(-1, "Завершено", "Завершённые"),
-    Expired(-1, "Просрочено", "Просроченные")
+/*
+TODO: добавить поддержку тёмной темы
+ */
+enum class TaskStatus(@ColorRes val color: Color, val text: String, val filterText: String) {
+    Unknown(Color.Blue, "Все", "Все"),
+    New(Color.Blue, "Новое", "Новые"),
+    InWork(Color.Yellow, "В работе", "В работе"),
+    Completed(Color.Green, "Завершено", "Завершённые"),
+    Expired(Color.Red, "Просрочено", "Просроченные")
 }

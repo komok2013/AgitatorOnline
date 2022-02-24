@@ -2,6 +2,7 @@ package ru.edinros.agitator
 
 import android.app.Application
 import com.chibatching.kotpref.Kotpref
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber.*
@@ -17,6 +18,7 @@ class AgitatorOnlineApp : Application() {
         } else {
             //plant(CrashReportingTree())
         }
+        AndroidThreeTen.init(this)
         super.onCreate()
     }
 }

@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.edinros.agitator.core.repositories.TaskRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -25,14 +26,19 @@ class TaskListVM @Inject constructor(private val repository: TaskRepository) : V
 
     private val _refreshTaskStatus = MutableStateFlow<TaskFetcherStatus>(TaskFetcherStatus.Progress)
     val refreshTaskStatus = _refreshTaskStatus.asStateFlow()
-    private fun refreshTask() = viewModelScope.launch {
+     fun refreshTask() = viewModelScope.launch {
         repository.fetchAndSaveTask().collect {
-            _refreshTaskStatus.value = it
+            _refreshTaskStatus.value = TaskFetcherStatus.Error("Test error")
         }
     }
 
     init {
         refreshTask()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Timber.d("$this cleared")
     }
 
 }
