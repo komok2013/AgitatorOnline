@@ -43,7 +43,6 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.edinros.agitator.core.local.entities.TaskEntity
 import ru.edinros.agitator.core.utils.formatterWithDay
-import ru.edinros.agitator.features.auth.AuthVM
 import ru.edinros.agitator.features.task.TaskFetcherStatus
 import ru.edinros.agitator.features.task.TaskListVM
 import ru.edinros.agitator.ui.theme.AgitatorOnlineTheme
@@ -294,8 +293,10 @@ fun Dot(size: Dp, color: Color) {
 @Composable
 private fun StatusPanelView(model: TaskListVM = hiltViewModel(),scaffoldState: ScaffoldState) {
     val state by model.refreshTaskStatus.collectAsState()
-    when (val r = state) {
-        is TaskFetcherStatus.Error -> LaunchedEffect(scaffoldState){scaffoldState.snackbarHostState.showSnackbar(r.errorMessage) }
+    when (state) {
+        is TaskFetcherStatus.Error -> LaunchedEffect(scaffoldState){scaffoldState.snackbarHostState.showSnackbar(
+            (state as TaskFetcherStatus.Error).errorMessage
+        ) }
         TaskFetcherStatus.Progress -> LinearProgressIndicator(
             Modifier
                 .fillMaxWidth()

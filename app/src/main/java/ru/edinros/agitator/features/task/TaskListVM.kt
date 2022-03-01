@@ -26,9 +26,9 @@ class TaskListVM @Inject constructor(private val repository: TaskRepository) : V
 
     private val _refreshTaskStatus = MutableStateFlow<TaskFetcherStatus>(TaskFetcherStatus.Progress)
     val refreshTaskStatus = _refreshTaskStatus.asStateFlow()
-     fun refreshTask() = viewModelScope.launch {
+     private fun refreshTask() = viewModelScope.launch {
         repository.fetchAndSaveTask().collect {
-            _refreshTaskStatus.value = TaskFetcherStatus.Error("Test error")
+            _refreshTaskStatus.value = it
         }
     }
 
