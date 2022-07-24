@@ -30,7 +30,7 @@
             </intent-filter>
         </service>
         <activity
-            android:name=".TaskActivity"
+            android:name=".features.auth.AuthActivity"
             android:exported="true"
             android:theme="@style/Theme.AgitatorOnline">
             <intent-filter>
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
 <!--        <activity-->
-<!--            android:name="ru.edinros.agitator.MainActivity"-->
+<!--            android:name="ru.edinros.agitator.TaskActivity"-->
 <!--            android:exported="true"-->
 <!--            android:theme="@style/Theme.AgitatorOnline">-->
 <!--        </activity>-->

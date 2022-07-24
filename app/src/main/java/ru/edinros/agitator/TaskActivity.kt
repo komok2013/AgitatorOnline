@@ -1,5 +1,6 @@
 package ru.edinros.agitator
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,13 +8,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DateRange
@@ -37,16 +36,19 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import ru.edinros.agitator.core.local.entities.TaskEntity
 import ru.edinros.agitator.core.utils.formatterWithDay
-import ru.edinros.agitator.features.profile.MyPlayer
-import ru.edinros.agitator.features.profile.ShowVideos
-import ru.edinros.agitator.features.profile.VideoPlayer
 import ru.edinros.agitator.features.task.TaskFetcherStatus
 import ru.edinros.agitator.features.task.TaskListVM
 import ru.edinros.agitator.ui.theme.AgitatorOnlineTheme
@@ -58,15 +60,13 @@ class TaskActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface {
-
-                ShowVideos()
-            }
+            MainScreen()
         }
     }
 }
+
 @Composable
-fun MainScreen(){
+fun MainScreen() {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     AgitatorOnlineTheme {
@@ -74,102 +74,66 @@ fun MainScreen(){
             scaffoldState = scaffoldState,
             modifier = Modifier.fillMaxSize()
         ) {
-            NavHost(navController, startDestination = Destinations.Main) {
-                composable(Destinations.Main) {
-                    Container(navController)
+            NavHost(navController, startDestination = Destinations.TaskList) {
+                composable(Destinations.TaskList) {
+                    TaskListScreen(navController = navController, scaffoldState = scaffoldState)
                 }
-
-                composable(Destinations.List1) {
-                    List1()
-                }
-                composable(Destinations.List2) {
-                    List2()
-                }
-                composable(Destinations.List3) {
-                    List3()
+                composable("${Destinations.TaskDetail}/{taskId}/{taskName}",
+                    arguments = listOf(
+                        navArgument("taskId") { type = NavType.LongType },
+                        navArgument("taskName") { type = NavType.StringType },
+                    )
+                ) { entry ->
+                    entry.arguments?.getLong("taskId")?.let { id->
+                        entry.arguments?.getString("taskName")?.let {name->
+                            TaskDetail(
+                                taskId = id,
+                                taskName = name,
+                            )
+                        }
+                    }
                 }
             }
 
         }
     }
 }
-@Composable
-fun Container(navController: NavController){
-    Column() {
-        Button(onClick = { navController.navigate(Destinations.List1) }) {
-            Text("List1")
-        }
-        Button(onClick = { navController.navigate(Destinations.List2)}) {
-            Text("List2")
-        }
-
-        Button(onClick = { navController.navigate(Destinations.List3) }) {
-            Text("List3")
-        }
-    }
-}
-@Composable
-fun List1(){
-            Text("List1")
-}
-@Composable
-fun List2(){
-    Text("List2")
-}
-@Composable
-fun List3(){
-    Text("List3")
-}
 
 
-@ExperimentalMaterialApi
-@Composable
-fun MainScreen1(){
-    val navController = rememberNavController()
-    val scaffoldState = rememberScaffoldState()
-    AgitatorOnlineTheme {
-        Scaffold(
-            scaffoldState = scaffoldState,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Navigation(navController = navController,scaffoldState)
-        }
-    }
-}
 object Destinations {
-    const val Main = "Main"
-    const val List1 = "List1"
-    const val List2 = "List2"
-    const val List3 = "List3"
+    const val TaskList = "TaskList"
+    const val TaskDetail = "TaskDetail"
+    const val Profile = "Profile"
 }
-@ExperimentalMaterialApi
+
 @Composable
-fun TaskListScreen(navController: NavController, scaffoldState: ScaffoldState){
-    val model:TaskListVM = hiltViewModel()
+fun TaskListScreen(navController: NavController, scaffoldState: ScaffoldState) {
+    val model: TaskListVM = hiltViewModel()
     val res by model.list.collectAsState()
     Column() {
-        StatusPanelView(scaffoldState=scaffoldState)
-        TaskCards(res)
-    }
-}
-@ExperimentalMaterialApi
-@Composable
-fun Navigation(navController: NavHostController,scaffoldState: ScaffoldState) {
-    NavHost(navController, startDestination = Destinations.Main) {
-//        composable(Destinations.Main) {
-//            TaskListScreen(navController,scaffoldState)
-//        }
+        StatusPanelView(scaffoldState = scaffoldState)
+        TaskCards(res, navController)
     }
 }
 
 @Composable
-private fun TaskShortCard(task: TaskEntity) {
+fun TaskDetail(
+    taskId: Long,
+    taskName: String,
+) {
+    Text(text = "$taskId<->$taskName")
+}
+
+@Composable
+private fun TaskCard(task: TaskEntity, navController: NavController) {
     val modifier = Modifier.fillMaxWidth()
     Card(modifier
         .padding(8.dp)
         .toggleable(
             value = true,
             onValueChange = {
+
+                navController.navigate("${Destinations.TaskDetail}/${task.id}/${task.text}")
             }
 
         )) {
@@ -219,11 +183,10 @@ private fun TaskShortCard(task: TaskEntity) {
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
-private fun TaskCards(list: List<TaskEntity>) {
-    LazyColumn{
-        list.map{item { TaskShortCard(task = it)}}
+private fun TaskCards(list: List<TaskEntity>, navController: NavController) {
+    LazyColumn {
+        list.map { item { TaskCard(task = it, navController = navController) } }
     }
 }
 
@@ -257,6 +220,22 @@ fun TaskStatusView(modifier: Modifier, task: TaskEntity) {
         modifier = modifier,
         inlineContent = inlineContent
     )
+}
+
+class AssetParamType : NavType<TaskEntity>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): TaskEntity? =
+        bundle.getParcelable<TaskEntity>(key)
+
+
+    override fun parseValue(value: String): TaskEntity =
+        //Json.decodeFromString(value)
+        Gson().fromJson(value,TaskEntity::class.java)
+
+
+    override fun put(bundle: Bundle, key: String, value: TaskEntity) {
+        bundle.putParcelable(key, value)
+    }
+
 }
 
 @Composable
@@ -355,12 +334,14 @@ fun Dot(size: Dp, color: Color) {
 }
 
 @Composable
-private fun StatusPanelView(model: TaskListVM = hiltViewModel(),scaffoldState: ScaffoldState) {
+private fun StatusPanelView(model: TaskListVM = hiltViewModel(), scaffoldState: ScaffoldState) {
     val state by model.refreshTaskStatus.collectAsState()
     when (state) {
-        is TaskFetcherStatus.Error -> LaunchedEffect(scaffoldState){scaffoldState.snackbarHostState.showSnackbar(
-            (state as TaskFetcherStatus.Error).errorMessage
-        ) }
+        is TaskFetcherStatus.Error -> LaunchedEffect(scaffoldState) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                (state as TaskFetcherStatus.Error).errorMessage
+            )
+        }
         TaskFetcherStatus.Progress -> LinearProgressIndicator(
             Modifier
                 .fillMaxWidth()

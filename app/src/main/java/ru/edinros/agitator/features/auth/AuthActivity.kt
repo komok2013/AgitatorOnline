@@ -74,7 +74,6 @@ class AuthActivity : ComponentActivity() {
                         )
                         is AuthState.PhoneError -> {
                             LaunchedEffect(scaffoldState){scaffoldState.snackbarHostState.showSnackbar(res.message) }
-                            //scope.launch { snackBarHostState.showSnackbar(res.message) }
                             TextEditWithActionButton(
                                 state=res,
                                 visualTransformation = PhoneVisualTransformation(),
@@ -167,14 +166,14 @@ private fun SmsRetrieverUserConsentBroadcast(onCodeReceived: (code: String) -> U
 interface PhoneRules {
     companion object {
         const val maxLength = 10
-        val filter = { s: String -> s.length <= maxLength && s.count { c -> c.isLetter() } == 0 }
+        val filter = { s: String -> s.length <= maxLength && s.none { c -> c.isLetter() } }
     }
 }
 
 interface CodeRules {
     companion object {
         const val maxLength = 6
-        val filter = { s: String -> s.length <= maxLength && s.count { c -> c.isLetter() } == 0 }
+        val filter = { s: String -> s.length <= maxLength && s.none{ c -> c.isLetter() } }
     }
 }
 
@@ -188,13 +187,11 @@ private fun TextEditWithActionButton(
     maxLength: Int = 0,
     action: ((String) -> Unit)? = null
 ) {
-    //('А'..'Я').forEach { Timber.d("->%s",it) }
     var text by rememberSaveable { mutableStateOf(initText) }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         TextField(
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Transparent,

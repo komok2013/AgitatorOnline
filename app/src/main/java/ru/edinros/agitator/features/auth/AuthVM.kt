@@ -9,33 +9,35 @@ import kotlinx.coroutines.launch
 import ru.edinros.agitator.core.prefs.AuthPref
 import ru.edinros.agitator.core.repositories.AuthRepository
 import javax.inject.Inject
+
 sealed class AuthState {
     object Init : AuthState()
     object Progress : AuthState()
     object PhoneSuccess : AuthState()
-    class PhoneError(val message: String) : AuthState()
     object AuthSuccess : AuthState()
+    class PhoneError(val message: String) : AuthState()
     class AuthError(val message: String) : AuthState()
 }
+
 @HiltViewModel
-class AuthVM @Inject constructor(private val repository: AuthRepository):ViewModel() {
+class AuthVM @Inject constructor(private val repository: AuthRepository) : ViewModel() {
     private val _state = MutableStateFlow<AuthState>(AuthState.Init)
     val state = _state.asStateFlow()
 
     fun proceedPhoneNumber(phone: String) = viewModelScope.launch {
         AuthPref.phone = phone
         _state.value = AuthState.Progress
-            repository.proceedPhoneNumber(phone).fold(
-                {
-                    _state.value = AuthState.PhoneError(it.errorMsg())
-                },
-                {
-                    _state.value = AuthState.PhoneSuccess
-                }
-            )
-        }
+        repository.proceedPhoneNumber(phone).fold(
+            {
+                _state.value = AuthState.PhoneError(it.errorMsg())
+            },
+            {
+                _state.value = AuthState.PhoneSuccess
+            }
+        )
+    }
 
-    fun proceedAuthentication(code: String)=viewModelScope.launch {
+    fun proceedAuthentication(code: String) = viewModelScope.launch {
         _state.value = AuthState.Progress
         repository.proceedAuthentication(code).fold(
             {
